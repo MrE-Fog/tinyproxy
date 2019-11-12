@@ -30,10 +30,12 @@ RUN apk update \
         asciidoc \
         autoconf \
     && \
+    mkdir /tinyproxy \
+    && \
     ./autogen.sh \
     && \
     ./configure \
-        --prefix=/tmp \
+        --prefix=/tinyproxy \
         --enable-xtinyproxy \
         --enable-filter \
         --enable-upstream \
@@ -48,9 +50,9 @@ RUN apk update \
 
 FROM alpine:3.10
 
-COPY --from=build /tmp/share /tinyproxy/share
-COPY --from=build /tmp/etc /tinyproxy/etc
-COPY --from=build /tmp/bin /tinyproxy/bin
+COPY --from=build /tinyproxy/share /tinyproxy/share
+COPY --from=build /tinyproxy/etc /tinyproxy/etc
+COPY --from=build /tinyproxy/bin /tinyproxy/bin
 
 RUN apk update \
     && \

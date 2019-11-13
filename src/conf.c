@@ -173,6 +173,8 @@ static void config_free_regex (void);
 static HANDLE_FUNC (handle_proxiedhost);
 static HANDLE_FUNC (handle_proxiedport);
 
+static HANDLE_FUNC (handle_healthapipath);
+
 /*
  * This macro can be used to make standard directives in the form:
  *   directive arguments [arguments ...]
@@ -215,6 +217,7 @@ struct {
         STDCONF ("stathost", STR, handle_stathost),
         STDCONF ("xtinyproxy",  BOOL, handle_xtinyproxy),
         STDCONF ("proxiedhost", STR, handle_proxiedhost),
+        STDCONF ("healthapipath", STR, handle_healthapipath),
         /* boolean arguments */
         STDCONF ("syslog", BOOL, handle_syslog),
         STDCONF ("bindsame", BOOL, handle_bindsame),
@@ -317,6 +320,7 @@ static void free_config (struct config_s *conf)
         safefree (conf->bind_address);
         safefree (conf->via_proxy_name);
         safefree (conf->proxied_host);
+        safefree (conf->health_api_path);
         hashmap_delete (conf->errorpages);
         free_added_headers (conf->add_headers);
         safefree (conf->errorpage_undef);
@@ -747,6 +751,18 @@ static HANDLE_FUNC (handle_proxiedhost)
         log_message (LOG_INFO,
                      "Setting proxied host to '%s'",
                      conf->proxied_host);
+        return 0;
+}
+
+static HANDLE_FUNC (handle_healthapipath)
+{
+        int r = set_string_arg (&conf->health_api_path, line, &match[2]);
+
+        if (r)
+                return r;
+        log_message (LOG_INFO,
+                     "Setting health API path to '%s'",
+                     conf->health_api_path);
         return 0;
 }
 

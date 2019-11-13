@@ -348,6 +348,11 @@ ReversePath "/example/" "http://www.example.com/"
     The host name and the port to which all requests from clients
     are sent. If ProxiedHost is set, ProxiedPort must be set, too.
 
+*HealthAPIPath*::
+
+    The path of the health API. Tinyproxy returns 200 OK for requests
+    to this path.
+
 BUGS
 ----
 

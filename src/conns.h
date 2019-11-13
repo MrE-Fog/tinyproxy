@@ -1,5 +1,6 @@
 /* tinyproxy - A fast light-weight HTTP proxy
  * Copyright (C) 2001 Robert James Kaes <rjkaes@users.sourceforge.net>
+ * Copyright (C) 2019 Kaito Yamada <kaitoy@pcap4j.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +41,7 @@ struct conn_s {
         /* Booleans */
         unsigned int connect_method;
         unsigned int show_stats;
+        unsigned int health;
 
         /*
          * This structure stores key -> value mappings for substitution

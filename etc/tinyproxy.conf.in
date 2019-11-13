@@ -352,3 +352,9 @@ ViaProxyName "tinyproxy"
 #
 #ProxiedHost "some.proxied.host.com"
 #ProxiedPort 8080
+
+#
+# The path of the health API. Tinyproxy returns 200 OK for requests
+# to this path.
+#
+#HealthAPIPath "/healthz"

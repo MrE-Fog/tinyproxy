@@ -434,7 +434,12 @@ BAD_REQUEST_ERROR:
                 }
 
                 connptr->connect_method = TRUE;
+        } else if (config.health_api_path && strcmp (config.health_api_path, url) == 0) {
+                log_message (LOG_INFO, "Request for the health API.");
+                connptr->health = TRUE;
+                goto fail;
         } else {
+
 #ifdef TRANSPARENT_PROXY
                 if (!do_transparent_proxy
                     (connptr, hashofheaders, request, &config, &url)) {
@@ -867,10 +872,11 @@ process_client_headers (struct conn_s *connptr, hashmap_t hashofheaders)
 
         /*
          * Don't send headers if there's already an error, if the request was
-         * a stats request, or if this was a CONNECT method (unless upstream
+         * a stats request, if the request was to the health API,
+         * or if this was a CONNECT method (unless upstream
          * http proxy is in use.)
          */
-        if (connptr->server_fd == -1 || connptr->show_stats
+        if (connptr->server_fd == -1 || connptr->show_stats || connptr->health
             || (connptr->connect_method && ! UPSTREAM_IS_HTTP(connptr))) {
                 log_message (LOG_INFO,
                              "Not sending client headers to remote machine");
@@ -1668,7 +1674,7 @@ e401:
 
         request = process_request (connptr, hashofheaders);
         if (!request) {
-                if (!connptr->show_stats) {
+                if (!connptr->show_stats || !connptr->health) {
                         update_stats (STAT_BADCONN);
                 }
                 goto fail;
@@ -1735,6 +1741,11 @@ e401:
         goto done;
 
 fail:
+        if (connptr->health) {
+                send_http_headers (connptr, 200, "OK");
+                goto done;
+        }
+
         /*
          * First, get the body if there is one.
          * If we don't read all there is from the socket first,

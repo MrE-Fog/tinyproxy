@@ -119,6 +119,11 @@ struct config_s {
          */
         char *proxied_host;
         unsigned int proxied_port;
+
+        /*
+         * The path of the health API.
+         */
+        char *health_api_path;
 };
 
 extern int reload_config_file (const char *config_fname, struct config_s *conf,

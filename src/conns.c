@@ -1,5 +1,6 @@
 /* tinyproxy - A fast light-weight HTTP proxy
  * Copyright (C) 2001 Robert James Kaes <rjkaes@users.sourceforge.net>
+ * Copyright (C) 2019 Kaito Yamada <kaitoy@pcap4j.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,6 +71,7 @@ struct conn_s *initialize_conn (int client_fd, const char *ipaddr,
 
         connptr->connect_method = FALSE;
         connptr->show_stats = FALSE;
+        connptr->health = FALSE;
 
         connptr->protocol.major = connptr->protocol.minor = 0;
 

@@ -354,7 +354,12 @@ int getpeer_information (int fd, char *ipaddr, char *string_addr)
         if (get_ip_string ((struct sockaddr *) &sa, ipaddr, IP_LENGTH) == NULL)
                 return -1;
 
+        int flags = 0;
+        if (config.disable_reverse_lookup) {
+                flags = NI_NUMERICHOST;
+        }
+
         /* Get the full host name */
         return getnameinfo ((struct sockaddr *) &sa, salen,
-                            string_addr, HOSTNAME_LENGTH, NULL, 0, 0);
+                            string_addr, HOSTNAME_LENGTH, NULL, 0, flags);
 }

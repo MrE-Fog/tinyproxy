@@ -175,6 +175,8 @@ static HANDLE_FUNC (handle_proxiedport);
 
 static HANDLE_FUNC (handle_healthapipath);
 
+static HANDLE_FUNC (handle_disablereverselookup);
+
 /*
  * This macro can be used to make standard directives in the form:
  *   directive arguments [arguments ...]
@@ -222,6 +224,7 @@ struct {
         STDCONF ("syslog", BOOL, handle_syslog),
         STDCONF ("bindsame", BOOL, handle_bindsame),
         STDCONF ("disableviaheader", BOOL, handle_disableviaheader),
+        STDCONF ("disablereverselookup", BOOL, handle_disablereverselookup),
         /* integer arguments */
         STDCONF ("port", INT, handle_port),
         STDCONF ("maxclients", INT, handle_maxclients),
@@ -543,6 +546,7 @@ static void initialize_with_defaults (struct config_s *conf,
         }
 
         conf->disable_viaheader = defaults->disable_viaheader;
+        conf->disable_reverse_lookup = defaults->disable_reverse_lookup;
 
         if (defaults->errorpage_undef) {
                 conf->errorpage_undef = safestrdup (defaults->errorpage_undef);
@@ -776,6 +780,19 @@ static HANDLE_FUNC (handle_disableviaheader)
 
         log_message (LOG_INFO,
                      "Disabling transmission of the \"Via\" header.");
+        return 0;
+}
+
+static HANDLE_FUNC (handle_disablereverselookup)
+{
+        int r = set_bool_arg (&conf->disable_reverse_lookup, line, &match[2]);
+
+        if (r) {
+                return r;
+        }
+
+        log_message (LOG_INFO,
+                     "Disabling reverse lookup.");
         return 0;
 }
 

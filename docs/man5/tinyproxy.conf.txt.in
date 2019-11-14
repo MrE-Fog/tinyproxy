@@ -353,6 +353,11 @@ ReversePath "/example/" "http://www.example.com/"
     The path of the health API. Tinyproxy returns 200 OK for requests
     to this path.
 
+*DisableReverseLookup*::
+
+    If this boolean option is set to `Yes`, Tinyproxy doesn't perform
+    reverse DNS lookups of IP addresses.
+
 BUGS
 ----
 

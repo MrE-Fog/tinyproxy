@@ -124,6 +124,8 @@ struct config_s {
          * The path of the health API.
          */
         char *health_api_path;
+
+        unsigned int disable_reverse_lookup; /* boolean */
 };
 
 extern int reload_config_file (const char *config_fname, struct config_s *conf,

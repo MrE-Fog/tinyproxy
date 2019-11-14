@@ -358,3 +358,9 @@ ViaProxyName "tinyproxy"
 # to this path.
 #
 #HealthAPIPath "/healthz"
+
+#
+# If this boolean option is set to `Yes`, Tinyproxy doesn't perform
+# reverse DNS lookups of IP addresses.
+#
+#DisableReverseLookup Yes
